@@ -1,0 +1,26 @@
+{
+  "name": "dev-portal",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "normalizr": "^3.2.4",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5",
+    "redux": "^4.0.0",
+    "redux-actions": "^2.6.1",
+    "redux-saga": "^0.16.0",
+    "redux-thunk": "^2.3.0",
+    "reselect": "^3.0.1",
+    "styled-components": "^3.4.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
