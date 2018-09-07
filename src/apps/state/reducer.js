@@ -1,25 +1,24 @@
+import { combineReducers } from 'redux'
 import { handleActions, combineActions } from 'redux-actions'
 import { createSelector } from 'reselect'
 import { makeErrorReducer, makeIsFetchingReducer } from '../../utils/reducers'
 import {
-  REQUEST_APPS,
-  RECEIVE_APPS,
-  RECEIVE_UPDATE_APP,
-  REQUEST_UPDATE_APP
+  requestApps,
+  receiveApps,
+  receiveUpdateApp,
+  requestUpdateApp
 } from './actions'
 import {
-  REQUEST_APP_USERS,
-  RECEIVE_APP_USERS,
-  selectUsersById
+  selectUsersById,
+  requestAppUsers,
+  receiveAppUsers
 } from '../../users/state'
-
-import { combineReducers } from '../../../../../Library/Caches/typescript/3.0/node_modules/redux'
 
 const PAGE_SIZE = 25
 
 const ids = handleActions(
   {
-    [RECEIVE_APPS]: {
+    [receiveApps]: {
       next: (_state, action) => action.payload.result.apps
     }
   },
@@ -28,10 +27,10 @@ const ids = handleActions(
 
 const byId = handleActions(
   {
-    [RECEIVE_APPS]: {
+    [receiveApps]: {
       next: (_state, action) => action.payload.entities.apps
     },
-    [RECEIVE_UPDATE_APP]: {
+    [receiveUpdateApp]: {
       next: (state, action) => ({
         ...state,
         ...action.payload.entities.apps
@@ -43,18 +42,18 @@ const byId = handleActions(
 
 const updating = handleActions(
   {
-    [RECEIVE_APPS]: {
+    [receiveApps]: {
       next: (_state, action) =>
         action.payload.result.apps.reduce((acc, id) => {
           acc[id] = false
           return acc
         }, {})
     },
-    [REQUEST_UPDATE_APP]: (state, action) => ({
+    [requestUpdateApp]: (state, action) => ({
       ...state,
       [action.payload.id]: true
     }),
-    [RECEIVE_UPDATE_APP]: (state, action) => ({
+    [receiveUpdateApp]: (state, action) => ({
       ...state,
       [action.payload.result.app]: false
     })
@@ -64,8 +63,8 @@ const updating = handleActions(
 
 const appUser = handleActions(
   {
-    [REQUEST_APP_USERS]: (state, action) => ({ ...state, isFetching: true }),
-    [RECEIVE_APP_USERS]: {
+    [requestAppUsers]: (state, action) => ({ ...state, isFetching: true }),
+    [receiveAppUsers]: {
       next: (state, action) => ({
         ...state,
         isFetching: false,
@@ -80,14 +79,14 @@ const appUser = handleActions(
 
 const users = handleActions(
   {
-    [RECEIVE_APPS]: {
+    [receiveApps]: {
       next: (_state, action) =>
         action.payload.result.apps.reduce((acc, id) => {
           acc[id] = appUser(undefined, action)
           return acc
         }, {})
     },
-    [combineActions(REQUEST_APP_USERS, RECEIVE_APP_USERS)]: (state, action) => {
+    [combineActions(requestAppUsers, receiveAppUsers)]: (state, action) => {
       const { appId } = action.payload
       return {
         ...state,
@@ -103,8 +102,8 @@ export default combineReducers({
   byId,
   updating,
   users,
-  isFetching: makeIsFetchingReducer(REQUEST_APPS, RECEIVE_APPS),
-  fetchError: makeErrorReducer(REQUEST_APPS, RECEIVE_APPS)
+  isFetching: makeIsFetchingReducer(requestApps, receiveApps),
+  fetchError: makeErrorReducer(requestApps, receiveApps)
 })
 
 const selectAppsIds = state => state.apps.ids

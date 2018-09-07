@@ -1,14 +1,13 @@
 import { combineActions, handleActions } from 'redux-actions'
 import { combineReducers } from 'redux'
 import { makeIsFetchingReducer, makeErrorReducer } from '../../utils/reducers'
-import { REQUEST_LOGIN, RECEIVE_LOGIN, CLEAR_ACCESS_TOKEN } from './actions'
+import { receiveLogin, requestLogin, clearAccessToken } from './actions'
 
 const initialValue = localStorage.getItem('accessToken')
 const accessToken = handleActions(
   {
-    [combineActions(REQUEST_LOGIN, CLEAR_ACCESS_TOKEN)]: (_state, action) =>
-      null,
-    [RECEIVE_LOGIN]: {
+    [combineActions(requestLogin, clearAccessToken)]: (_state, action) => null,
+    [receiveLogin]: {
       next: (_state, action) => action.payload.accessToken,
       throw: (_state, action) => null
     }
@@ -17,8 +16,8 @@ const accessToken = handleActions(
 )
 
 export default combineReducers({
-  isLoggingIn: makeIsFetchingReducer(REQUEST_LOGIN, RECEIVE_LOGIN),
-  error: makeErrorReducer(REQUEST_LOGIN, RECEIVE_LOGIN),
+  isLoggingIn: makeIsFetchingReducer(requestLogin, receiveLogin),
+  error: makeErrorReducer(requestLogin, receiveLogin),
   accessToken
 })
 

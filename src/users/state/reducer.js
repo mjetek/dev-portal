@@ -1,10 +1,10 @@
 import { handleActions } from 'redux-actions'
-import { RECEIVE_APP_USERS } from './actions'
-import { combineReducers } from '../../../../../Library/Caches/typescript/3.0/node_modules/redux'
+import { receiveAppUsers } from './actions'
+import { combineReducers } from 'redux'
 
 const byId = handleActions(
   {
-    [RECEIVE_APP_USERS]: {
+    [receiveAppUsers]: {
       next: (state, action) => ({ ...state, ...action.payload.entities.users })
     }
   },
